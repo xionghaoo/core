@@ -1,4 +1,4 @@
-package xh.zero.core
+package xh.zero.core.utils
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
@@ -8,9 +8,7 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.media.AudioManager
-import android.net.ConnectivityManager
 import android.net.Uri
-import android.net.wifi.WifiManager
 import android.os.Build
 import android.provider.Settings
 import android.text.method.DigitsKeyListener
