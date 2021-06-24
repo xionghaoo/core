@@ -57,7 +57,7 @@ afterEvaluate {
                 // You can then customize attributes of the publication as shown below.
                 groupId = 'xh.zero.core'
                 artifactId = 'core'
-                version = '1.0.2'
+                version = '1.0.3'
             }
         }
     }
