@@ -1,0 +1,3 @@
+rootProject.name = "xh_core"
+include ':app'
+include ':core'
