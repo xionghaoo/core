@@ -6,13 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
+    <xh.zero.core.widgets.CornerView
+        android:id="@+id/textView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:cv_color="@color/purple_500"
+        app:cv_direction="leftBottom"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

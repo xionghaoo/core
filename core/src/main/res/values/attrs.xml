@@ -16,4 +16,13 @@
         </attr>
         <attr name="triangleStrokeWidth" format="dimension"/>
     </declare-styleable>
+    <declare-styleable name="CornerView">
+        <attr name="cv_color" format="color"/>
+        <attr name="cv_direction" format="enum">
+            <enum name="leftTop" value="0"/>
+            <enum name="leftBottom" value="1"/>
+            <enum name="rightTop" value="2"/>
+            <enum name="rightBottom" value="3"/>
+        </attr>
+    </declare-styleable>
 </resources>
