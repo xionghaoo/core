@@ -4,6 +4,7 @@ plugins {
 }
 
 apply from: '../versions.gradle'
+apply from: '../config.gradle'
 
 android {
     compileSdkVersion 30
@@ -23,6 +24,8 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            renameApk()
         }
     }
     compileOptions {
@@ -50,6 +53,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     implementation project(":core")
+
+    implementation dpes.gson
 
 //    implementation "com.github.xionghaoo:core:1.0.0"
 }
