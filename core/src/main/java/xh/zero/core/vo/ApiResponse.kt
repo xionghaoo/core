@@ -52,7 +52,7 @@ class ApiResponse<T> {
         error = networkError(t)
     }
 
-    private fun networkError(t: Throwable?) : String {
+    private fun networkError(t: Throwable?): String {
         return if (t is UnknownHostException) {
             "网络未连接"
         } else if ((t is TimeoutException) || (t is SocketTimeoutException)) {
@@ -62,7 +62,7 @@ class ApiResponse<T> {
         }
     }
 
-    public fun isSuccessful() : Boolean {
+    public fun isSuccessful(): Boolean {
         return code == 200
     }
 }

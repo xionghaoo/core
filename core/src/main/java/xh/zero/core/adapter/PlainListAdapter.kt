@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class PlainListAdapter<T>(private var _items: List<T>)
-    : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+abstract class PlainListAdapter<T>(private var _items: List<T>) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class ItemViewHolder(v: View) : RecyclerView.ViewHolder(v)
 
@@ -29,7 +29,7 @@ abstract class PlainListAdapter<T>(private var _items: List<T>)
         notifyDataSetChanged()
     }
 
-    abstract fun itemLayoutId() : Int
+    abstract fun itemLayoutId(): Int
 
     abstract fun bindView(v: View, item: T, position: Int)
 }

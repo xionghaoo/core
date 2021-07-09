@@ -15,26 +15,27 @@ import java.util.concurrent.atomic.AtomicBoolean
 class LiveDataCallAdapter<R>(val type: Type) : CallAdapter<R, LiveData<ApiResponse<R>>> {
 
 
-    override fun adapt(call: Call<R>?): LiveData<ApiResponse<R>> = object : LiveData<ApiResponse<R>>() {
-        val started: AtomicBoolean = AtomicBoolean(false)
+    override fun adapt(call: Call<R>?): LiveData<ApiResponse<R>> =
+        object : LiveData<ApiResponse<R>>() {
+            val started: AtomicBoolean = AtomicBoolean(false)
 
-        override fun onActive() {
-            super.onActive()
-            if (started.compareAndSet(false, true)) {
-                call?.enqueue(object : Callback<R> {
-                    override fun onResponse(call: Call<R>?, response: Response<R>?) {
-                        if (response != null) {
-                            postValue(ApiResponse<R>(response))
+            override fun onActive() {
+                super.onActive()
+                if (started.compareAndSet(false, true)) {
+                    call?.enqueue(object : Callback<R> {
+                        override fun onResponse(call: Call<R>?, response: Response<R>?) {
+                            if (response != null) {
+                                postValue(ApiResponse<R>(response))
+                            }
                         }
-                    }
 
-                    override fun onFailure(call: Call<R>?, t: Throwable?) {
-                        postValue(ApiResponse<R>(t))
-                    }
-                })
+                        override fun onFailure(call: Call<R>?, t: Throwable?) {
+                            postValue(ApiResponse<R>(t))
+                        }
+                    })
+                }
             }
         }
-    }
 
     override fun responseType(): Type = type
 }

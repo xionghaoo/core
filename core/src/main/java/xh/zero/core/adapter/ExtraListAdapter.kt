@@ -8,9 +8,10 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import xh.zero.core.R
 
-abstract class ExtraListAdapter<T>(private var items: ArrayList<T>,
-                                   @LayoutRes private val tailLayout: Int = R.layout.common_list_item_tail)
-    : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+abstract class ExtraListAdapter<T>(
+    private var items: ArrayList<T>,
+    @LayoutRes private val tailLayout: Int = R.layout.common_list_item_tail
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class ItemViewHolder(v: View) : RecyclerView.ViewHolder(v)
 
@@ -56,7 +57,7 @@ abstract class ExtraListAdapter<T>(private var items: ArrayList<T>,
         notifyItemRemoved(position)
     }
 
-    abstract fun itemLayoutId() : Int
+    abstract fun itemLayoutId(): Int
 
     abstract fun bindView(v: View, item: T, position: Int)
 

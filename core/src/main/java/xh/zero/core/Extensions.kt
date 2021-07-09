@@ -21,10 +21,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcel
 import android.util.TypedValue
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -236,6 +238,12 @@ fun <T> List<T>.toArrayList() : ArrayList<T> {
 fun View.assignText(@IdRes viewId: Int, text: String?) {
     this.findViewById<TextView>(viewId).text = text
 }
+
+//fun Context.showToast(msg: String, gravity: Int? = null, x: Int = 0, y: Int = 0) {
+//    val toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT)
+//    gravity?.also { toast.setGravity(it, x, y) }
+//    toast.show()
+//}
 
 /**
  * Helper to throw exceptions only in Debug builds, logging a warning otherwise.

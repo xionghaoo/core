@@ -1,13 +1,17 @@
 package xh.zero.core.utils
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Color
 import android.media.AudioManager
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
@@ -130,38 +134,25 @@ class SystemUtil {
          * 调起系统电话
          */
         fun call(context: Activity?, phoneNumber: String?) {
-            if (context == null) return
-
-//            PermissionManager.checkSingle(
-//                activity = context,
-//                permission = Manifest.permission.CALL_PHONE,
-//                permissionName = "电话") {
-//                if (phoneNumber != null) {
-//                    val intent = Intent(Intent.ACTION_CALL)
-//                    intent.data = Uri.parse("tel:" + phoneNumber)
-//                    context.startActivity(intent)
-//                } else {
-//                    ToastUtil.show(context, "电话号码不能为空")
-//                }
-//            }
+            if (context == null || phoneNumber == null) return
+            if (hasPermission(context, Manifest.permission.CALL_PHONE)) {
+                val intent = Intent(Intent.ACTION_CALL)
+                intent.data = Uri.parse("tel:" + phoneNumber)
+                context.startActivity(intent)
+            }
         }
 
         /**
          * 调起系统短信
          */
         fun sms(context: Activity?, phone: String?, message: String?) {
-            if (context == null) return
-
-//            PermissionManager.checkSingle(
-//                activity = context,
-//                permission = Manifest.permission.SEND_SMS,
-//                permissionName = "短信") {
-//                val smsToUri = Uri.parse("smsto: " + phone)
-//                val intent = Intent(Intent.ACTION_SENDTO, smsToUri)
-//                intent.putExtra("sms_body", message)
-//                context.startActivity(intent)
-//            }
-
+            if (context == null || phone == null) return
+            if (hasPermission(context, Manifest.permission.SEND_SMS)) {
+                val smsToUri = Uri.parse("smsto: " + phone)
+                val intent = Intent(Intent.ACTION_SENDTO, smsToUri)
+                intent.putExtra("sms_body", message)
+                context.startActivity(intent)
+            }
         }
 
         /**
@@ -332,14 +323,19 @@ class SystemUtil {
             }
         }
 
-//        fun isNetworkConnected(context: Context?): Boolean {
-//            if (context == null) return false
-//
-//            val connectivityManager =
-//                    context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-//            val activeNetworkInfo = connectivityManager.activeNetworkInfo
-//            return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting
-//        }
+        @SuppressLint("MissingPermission")
+        fun isNetworkConnected(context: Context?): Boolean {
+            if (context == null) return false
+            if (hasPermission(context, Manifest.permission.ACCESS_NETWORK_STATE)) {
+                val connectivityManager =
+                    context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                val activeNetworkInfo = connectivityManager.activeNetworkInfo
+                return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting
+            } else {
+                throw IllegalAccessException("缺少 ACCESS_NETWORK_STATE 权限")
+            }
+
+        }
 
         /**
          * 调节系统音量
@@ -368,6 +364,10 @@ class SystemUtil {
             }
         }
 
+        fun hasPermission(context: Context, permission: String): Boolean {
+            val perm = context.checkCallingOrSelfPermission(permission)
+            return perm == PackageManager.PERMISSION_GRANTED
+        }
 
     }
 }

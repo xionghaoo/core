@@ -6,7 +6,8 @@ import okhttp3.*
  * retrofit Api Mock
  * mock uri end with "_mock"
  */
-class MockInterceptor(private val isDebug: Boolean, private val mockResponseJson: String) : Interceptor {
+class MockInterceptor(private val isDebug: Boolean, private val mockResponseJson: String) :
+    Interceptor {
 
     companion object {
         private const val SUCCESS_CODE = 200
@@ -24,7 +25,9 @@ class MockInterceptor(private val isDebug: Boolean, private val mockResponseJson
                     .body(
                         ResponseBody.create(
                             MediaType.parse("application/json"),
-                            mockResponseJson.toByteArray()))
+                            mockResponseJson.toByteArray()
+                        )
+                    )
                     .addHeader("content-type", "application/json")
                     .build()
             } else {
@@ -32,8 +35,10 @@ class MockInterceptor(private val isDebug: Boolean, private val mockResponseJson
             }
         } else {
             //just to be on safe side.
-            throw IllegalAccessError("MockInterceptor is only meant for Testing Purposes and " +
-                    "bound to be used only with DEBUG mode")
+            throw IllegalAccessError(
+                "MockInterceptor is only meant for Testing Purposes and " +
+                    "bound to be used only with DEBUG mode"
+            )
         }
     }
 

@@ -52,10 +52,9 @@ class FileUtil {
             return innerCache + outerCache
         }
 
-        private fun getFileSize(file: File) : Long {
+        fun getFileSize(file: File) : Long {
             var size: Long = 0
             if (file.isDirectory) {
-
                 for (f in file.listFiles()) {
                     size += getFileSize(f)
                 }
@@ -73,13 +72,17 @@ class FileUtil {
             deleteFile(outCacheFile)
         }
 
-        private fun deleteFile(file: File) {
-            if (file.isDirectory) {
-                for (f in file.listFiles()) {
-                    deleteFile(f)
+        fun deleteFile(file: File): Boolean {
+            return if (file.exists()) {
+                if (file.isDirectory) {
+                    for (f in file.listFiles()) {
+                        deleteFile(f)
+                    }
                 }
+                file.delete()
+            } else {
+                false
             }
-            file.delete()
         }
 
         fun saveImageToPath(img: Bitmap, path: String) {

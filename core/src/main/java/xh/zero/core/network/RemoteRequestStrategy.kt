@@ -27,7 +27,7 @@ abstract class RemoteRequestStrategy<ResultType>(private val context: Context) {
         result.addSource(apiResponse) { response ->
             result.removeSource(apiResponse)
             if (response?.isSuccessful()!!) {
-                onResponse(response)
+//                onResponse(response)
                 setValue(Resource.success(response.body))
             } else {
                 onFetchFailed(context, response.error!!)
@@ -51,5 +51,5 @@ abstract class RemoteRequestStrategy<ResultType>(private val context: Context) {
     protected abstract fun onFetchFailed(context: Context, error: String)
 
     // 该方法提供请求成功时处理响应数据的机会
-    protected abstract fun onResponse(response: ApiResponse<ResultType>)
+//    protected abstract fun onResponse(response: ApiResponse<ResultType>)
 }
