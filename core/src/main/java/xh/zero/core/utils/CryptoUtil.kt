@@ -9,12 +9,6 @@ import java.security.NoSuchAlgorithmException
  */
 class CryptoUtil {
     companion object {
-//        fun encryptToMD5(str: String) : String {
-//            val md = MessageDigest.getInstance("MD5")
-//            md.update((str + "kjUU#W1aop08EW#R%FD").toByteArray())
-//            return BigInteger(1, md.digest()).toString(16)
-//        }
-
         /**
          * MD5算法32位小写;
          * <hr></hr>
