@@ -29,6 +29,20 @@ import java.util.concurrent.TimeoutException
 open class NetworkUtil {
 
     companion object {
+
+        /**
+         * 网络异常提示文本处理
+         */
+        fun networkError(t: Throwable?) : String {
+            return if (t is UnknownHostException) {
+                "网络未连接"
+            } else if ((t is TimeoutException) || (t is SocketTimeoutException)) {
+                "网络连接超时"
+            } else {
+                t?.message ?: "未知网络错误"
+            }
+        }
+
         fun isNetworkConnected(context: Context?): Boolean {
             if (context == null) return false
 

@@ -52,6 +52,9 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "androidx.room:room-runtime:2.3.0"
+
+    def paging_version = "2.1.2"
+    implementation "androidx.paging:paging-runtime:$paging_version"
 }
 
 afterEvaluate {
@@ -65,7 +68,7 @@ afterEvaluate {
                 // You can then customize attributes of the publication as shown below.
                 groupId = 'xh.zero.core'
                 artifactId = 'core'
-                version = '1.0.4'
+                version = '1.0.5'
             }
         }
     }
