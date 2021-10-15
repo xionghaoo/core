@@ -12,7 +12,7 @@ abstract class PagingViewModel<R, T>(repo: PagingRepository<R, T>) : ViewModel()
     val itemList = Transformations.switchMap(result) { it.pagedList }
     val networkState = Transformations.switchMap(result) { it.networkState }
     val refreshState = Transformations.switchMap(result) { it.refreshState }
-    val extraData = Transformations.switchMap(result) {it.extraData}
+    val initialResponse = Transformations.switchMap(result) {it.initialResponse}
 
     fun refresh() {
         result.value?.refresh?.invoke()

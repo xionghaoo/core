@@ -13,7 +13,7 @@ import xh.zero.core.utils.AppExecutors
 abstract class PagingRepository<R, T>(private val appExecutors: AppExecutors) {
 
     @MainThread
-    fun loadData(params: List<String>) : Listing<T> {
+    fun loadData(params: List<String>) : Listing<R, T> {
         val sourceFactory = createSourceFactory(appExecutors, params)
 
 //        val livePagedList = sourceFactory.toLiveData(
@@ -39,8 +39,8 @@ abstract class PagingRepository<R, T>(private val appExecutors: AppExecutors) {
         val refreshState = Transformations.switchMap(sourceFactory.sourceLiveData) {
             it.initialLoad
         }
-        val extraData = Transformations.switchMap(sourceFactory.sourceLiveData) {
-            it.extraData
+        val initialResponse = Transformations.switchMap(sourceFactory.sourceLiveData) {
+            it.initialResponse
         }
         return Listing(
             pagedList = livePagedList,
@@ -54,7 +54,7 @@ abstract class PagingRepository<R, T>(private val appExecutors: AppExecutors) {
                 sourceFactory.sourceLiveData.value?.invalidate()
             },
             refreshState = refreshState,
-            extraData = extraData
+            initialResponse = initialResponse
         )
     }
 

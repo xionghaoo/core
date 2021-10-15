@@ -18,9 +18,7 @@ abstract class PagingDataSource<R, T>(private val appExecutors: AppExecutors)
 
     val initialLoad = MutableLiveData<NetworkState>()
 
-    val extraData = MutableLiveData<Any?>()
-
-
+    val initialResponse = MutableLiveData<R?>()
 
     fun retryAllFailed() {
         val prevRetry = retry
@@ -39,30 +37,27 @@ abstract class PagingDataSource<R, T>(private val appExecutors: AppExecutors)
         createInitialCall().enqueue(object : Callback<R> {
             override fun onFailure(call: Call<R>, t: Throwable) {
                 retry = { loadInitial(params, callback) }
-
+                initialResponse.postValue(null)
                 networkState.postValue(NetworkState.error(NetworkUtil.networkError(t)))
                 initialLoad.postValue(NetworkState.error(NetworkUtil.networkError(t)))
-                extraData.postValue(null)
             }
 
             override fun onResponse(call: Call<R>, response: Response<R>) {
                 if (response.isSuccessful) {
+                    initialResponse.postValue(response.body())
                     // 数据请求成功
                     retry = null
                     callback.onResult(convertToListData(response.body()), null, "2")
-
                     networkState.postValue(NetworkState.LOADED)
                     initialLoad.postValue(NetworkState.LOADED)
-                    extraData.postValue(response.body())
 
                     onResponse(response)
 
                 } else {
                     retry = { loadInitial(params, callback) }
-
+                    initialResponse.postValue(null)
                     networkState.postValue(NetworkState.error(response.message()))
                     initialLoad.postValue(NetworkState.error(response.message()))
-                    extraData.postValue(null)
                 }
             }
         })

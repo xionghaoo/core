@@ -23,7 +23,7 @@ abstract class PagingAdapter<T>(diff: DiffUtil.ItemCallback<T>,
                     LayoutInflater.from(parent.context).inflate(itemLayout(), parent, false)
                 )
             }
-            ITEM_TYPE_NETWORK_STATE -> NetworkStateViewHolder.create(parent, retryCallback)
+            ITEM_TYPE_NETWORK_STATE -> networkStateViewHolder(parent)
             else -> throw IllegalArgumentException("unknown view type $viewType")
         }
     }
@@ -31,10 +31,10 @@ abstract class PagingAdapter<T>(diff: DiffUtil.ItemCallback<T>,
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
             ITEM_TYPE_CONTENT -> {
-                bindItemView(holder.itemView, getItem(position))
+                bindItemView(holder.itemView, getItem(position), position)
             }
-            ITEM_TYPE_NETWORK_STATE -> (
-                    holder as NetworkStateViewHolder).bindTo(networkState)
+//            ITEM_TYPE_NETWORK_STATE -> (holder as NetworkStateViewHolder).bindTo(networkState)
+            ITEM_TYPE_NETWORK_STATE -> onBindNetworkStateView(holder, networkState)
         }
     }
 
@@ -82,7 +82,11 @@ abstract class PagingAdapter<T>(diff: DiffUtil.ItemCallback<T>,
 
     abstract fun itemLayout() : Int
 
-    abstract fun bindItemView(v: View, item: T?)
+    abstract fun bindItemView(v: View, item: T?, position: Int)
+
+    abstract fun networkStateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder
+
+    abstract fun onBindNetworkStateView(holder: RecyclerView.ViewHolder, state: NetworkState?)
 
     companion object {
         private const val ITEM_TYPE_CONTENT = 0

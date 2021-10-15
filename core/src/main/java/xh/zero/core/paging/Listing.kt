@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import xh.zero.core.vo.NetworkState
 
-data class Listing<T>(
+data class Listing<R, T>(
         // the LiveData of paged lists for the UI to observe
         val pagedList: LiveData<PagedList<T>>,
         // represents the network request status to show to the user
@@ -16,4 +16,4 @@ data class Listing<T>(
         val refresh: () -> Unit,
         // retries any failed requests.
         val retry: () -> Unit,
-        val extraData: LiveData<Any?>? = null)
+        val initialResponse: LiveData<R?>? = null)

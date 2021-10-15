@@ -10,8 +10,8 @@ import xh.zero.core.R
 import xh.zero.core.vo.NetworkState
 import xh.zero.core.vo.Status
 
-class NetworkStateViewHolder(view: View,
-                             private val retryCallback: () -> Unit)
+class DefaultNetworkStateViewHolder(view: View,
+                                    private val retryCallback: () -> Unit)
     : RecyclerView.ViewHolder(view) {
     private val progressBar = view.findViewById<View>(R.id.progress_bar)
     private val retry = view.findViewById<Button>(R.id.retry_button)
@@ -32,10 +32,10 @@ class NetworkStateViewHolder(view: View,
     }
 
     companion object {
-        fun create(parent: ViewGroup, retryCallback: () -> Unit): NetworkStateViewHolder {
+        fun create(parent: ViewGroup, retryCallback: () -> Unit): DefaultNetworkStateViewHolder {
             val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.network_state_item, parent, false)
-            return NetworkStateViewHolder(view, retryCallback)
+            return DefaultNetworkStateViewHolder(view, retryCallback)
         }
 
         fun toVisibility(constraint : Boolean): Int {
