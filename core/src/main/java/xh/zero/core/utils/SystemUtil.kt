@@ -3,11 +3,14 @@ package xh.zero.core.utils
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.usage.UsageStats
+import android.app.usage.UsageStatsManager
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.content.res.Resources
 import android.graphics.Color
 import android.media.AudioManager
@@ -17,6 +20,7 @@ import android.os.Build
 import android.provider.Settings
 import android.text.method.DigitsKeyListener
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -27,6 +31,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import java.util.*
 
 
 class SystemUtil {
@@ -367,6 +372,59 @@ class SystemUtil {
         fun hasPermission(context: Context, permission: String): Boolean {
             val perm = context.checkCallingOrSelfPermission(permission)
             return perm == PackageManager.PERMISSION_GRANTED
+        }
+
+        fun getTopAppFromLollipopOnwards(context: Context): String? {
+            var topPackageName: String? = null
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val mUsageStatsManager: UsageStatsManager? =
+                    context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager?
+                val time = System.currentTimeMillis()
+                // We get usage stats for the last 10 seconds
+                val stats: List<UsageStats>? = mUsageStatsManager?.queryUsageStats(
+                    UsageStatsManager.INTERVAL_DAILY,
+                    time - 1000 * 10,
+                    time
+                )
+                // Sort the stats by the last time used
+                if (stats != null) {
+                    val mySortedMap: SortedMap<Long, UsageStats> = TreeMap<Long, UsageStats>()
+                    for (usageStats in stats) {
+                        mySortedMap.put(usageStats.getLastTimeUsed(), usageStats)
+                    }
+                    if (!mySortedMap.isEmpty()) {
+                        topPackageName = mySortedMap.get(mySortedMap.lastKey())?.getPackageName()
+                        Log.e("SystemUtil", "TopPackage Name ${topPackageName}")
+                    }
+                }
+            }
+            return topPackageName
+        }
+
+        private fun hasUsageAccessSettingsOption(context: Context): Boolean {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val packageManager: PackageManager = context.packageManager
+                val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
+                val list: List<ResolveInfo> =
+                    packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+                list.isNotEmpty()
+            } else {
+                false
+            }
+        }
+
+        private fun isUsageStatsServiceOpen(context: Context): Boolean {
+            var queryUsageStats: List<UsageStats?>? = null
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                val usageStatsManager: UsageStatsManager =
+                    context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+                queryUsageStats = usageStatsManager.queryUsageStats(
+                    UsageStatsManager.INTERVAL_BEST,
+                    0,
+                    System.currentTimeMillis()
+                )
+            }
+            return !(queryUsageStats == null || queryUsageStats.isEmpty())
         }
 
     }

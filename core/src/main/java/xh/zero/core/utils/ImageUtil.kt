@@ -9,6 +9,7 @@ import android.net.Uri
 import java.io.*
 import kotlin.Exception
 import android.provider.MediaStore
+import android.view.View
 import xh.zero.core.R
 
 
@@ -225,6 +226,18 @@ class ImageUtil {
             val matrix = Matrix()
             matrix.postRotate(degree.toFloat())
             return Bitmap.createBitmap(img, 0, 0, img.width, img.height, matrix, true)
+        }
+
+        fun loadBitmapFromView(v: View): Bitmap? {
+            val b = Bitmap.createBitmap(
+                v.width,
+                v.height,
+                Bitmap.Config.ARGB_8888
+            )
+            val c = Canvas(b)
+            v.layout(v.left, v.top, v.right, v.bottom)
+            v.draw(c)
+            return b
         }
     }
 }
