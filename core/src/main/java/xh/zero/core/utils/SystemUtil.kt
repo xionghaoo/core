@@ -21,6 +21,7 @@ import android.provider.Settings
 import android.text.method.DigitsKeyListener
 import android.util.DisplayMetrics
 import android.util.Log
+import android.util.Size
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -425,6 +426,27 @@ class SystemUtil {
                 )
             }
             return !(queryUsageStats == null || queryUsageStats.isEmpty())
+        }
+
+        /**
+         * 获取状态栏高度
+         */
+        fun getNavigationBarHeight(resources: Resources): Int {
+            val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+            return if (resourceId > 0) {
+                resources.getDimensionPixelSize(resourceId)
+            } else 0
+        }
+
+        /**
+         * 获取完整的屏幕尺寸
+         */
+        fun screenSize(context: Context, isWidthAttach: Boolean = false) : Size {
+            val displayInfo = displayInfo(context)
+            val navHeight = getStatusBarHeight(context.resources)
+            val width = if (isWidthAttach) displayInfo.widthPixels + navHeight else displayInfo.widthPixels
+            val height = if (isWidthAttach) displayInfo.heightPixels else displayInfo.heightPixels + navHeight
+            return Size(width, height)
         }
 
     }

@@ -3,6 +3,7 @@ package xh.zero.xh_core
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 
 class MainActivity : AppCompatActivity() {
@@ -12,5 +13,9 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.btn_test).setOnClickListener {
 //            showToast("hello")
         }
+    }
+
+    fun print() {
+        Log.e("Hello", "dewdwdw")
     }
 }
